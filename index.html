@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
- <head>
+<head>
+  <!-- Permite caracteres especiales como tildes y ñ -->
   <meta charset="UTF-8">
+
+  <!-- Título que aparece en la pestaña del navegador -->
   <title>Lista de Regalos - Baby Shower</title>
+
+  <!-- Hace que la página se adapte a celulares -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Firebase v8 (NO módulos) -->
+  <!-- Carga Firebase versión 8 (compatible con GitHub Pages) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
-
+  <!-- Estilos visuales de la página -->
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -60,9 +65,11 @@
 
 <body>
 
+<!-- Título visible -->
 <h1>🎁 Lista de Regalos – Baby Shower</h1>
 <p>Selecciona un regalo. Una vez elegido, quedará reservado.</p>
 
+<!-- Tabla donde se cargan los artículos -->
 <table>
   <thead>
     <tr>
@@ -73,26 +80,26 @@
       <th>Acción</th>
     </tr>
   </thead>
+  <!-- Aquí JavaScript insertará las filas -->
   <tbody id="lista"></tbody>
 </table>
 
 <script>
-  // 🔑 CONFIGURACIÓN FIREBASE (REEMPLAZAR)
+  // 🔑 Configuración de Firebase (datos de tu proyecto)
   var firebaseConfig = {
-      apiKey: "AIzaSyBsYaMfBRzmDvTAudfyD_fhVAhFOWa9Z7A",
+    apiKey: "AIzaSyBsYaMfBRzmDvTAudfyD_fhVAhFOWa9Z7A",
     authDomain: "baby-shower-36afa.firebaseapp.com",
     databaseURL: "https://baby-shower-36afa-default-rtdb.firebaseio.com",
-    projectId: "baby-shower-36afa",
-    storageBucket: "baby-shower-36afa.firebasestorage.app",
-    messagingSenderId: "653796409549",
-    appId: "1:653796409549:web:4c43f6c74258a98881a984",
-    measurementId: "G-SB4NLY4K7Z"
-    };
+    projectId: "baby-shower-36afa"
+  };
 
+  // Inicializa Firebase
   firebase.initializeApp(firebaseConfig);
+
+  // Referencia a la base de datos
   var database = firebase.database();
 
-  // 📦 LISTA DE ARTÍCULOS (puedes ampliar a los 100)
+  // 📦 Lista de artículos (estos siempre se muestran)
   const articulos = [
     ["Pañales","Pañales niño","Recién nacido (0-1 mes)"],
     ["Pañales","Pañales niño","0-2 meses"],
@@ -108,41 +115,44 @@
     ["Otros","Inodoro entrenador","24-36 meses"]
   ];
 
+  // Referencia al <tbody>
   const lista = document.getElementById("lista");
 
-  function cargarArticulos() {
-    database.ref("reservas").on("value", snapshot => {
-      const reservados = snapshot.val() || {};
-      lista.innerHTML = "";
+  // Función que dibuja la tabla
+  function renderizar(reservados = {}) {
+    lista.innerHTML = "";
 
-      articulos.forEach((item, index) => {
-        const reservado = reservados[index];
-        const tr = document.createElement("tr");
+    articulos.forEach((item, index) => {
+      const tr = document.createElement("tr");
+      const reservado = reservados[index] === true;
 
-        tr.innerHTML = `
-          <td>${item[0]}</td>
-          <td>${item[1]}</td>
-          <td>${item[2]}</td>
-          <td>${reservado ? "<span class='reservado'>Reservado</span>" : "Disponible"}</td>
-          <td>
-            <button ${reservado ? "disabled" : ""} onclick="reservar(${index})">
-              Elegir
-            </button>
-          </td>
-        `;
-        lista.appendChild(tr);
-      });
+      tr.innerHTML = `
+        <td>${item[0]}</td>
+        <td>${item[1]}</td>
+        <td>${item[2]}</td>
+        <td>${reservado ? "<span class='reservado'>Reservado</span>" : "Disponible"}</td>
+        <td>
+          <button ${reservado ? "disabled" : ""} onclick="reservar(${index})">
+            Elegir
+          </button>
+        </td>
+      `;
+
+      lista.appendChild(tr);
     });
   }
 
+  // Escucha cambios en Firebase (tiempo real)
+  database.ref("reservas").on("value", function(snapshot) {
+    const reservados = snapshot.val() || {};
+    renderizar(reservados);
+  });
+
+  // Guarda una reserva en Firebase
   function reservar(index) {
     database.ref("reservas/" + index).set(true);
   }
-
-  cargarArticulos();
 </script>
 
 </body>
 </html>
-
-
