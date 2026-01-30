@@ -2,13 +2,17 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Lista de Regalos - Baby Shower</title>
+  <title>Lista de Regalos Baby Shower</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f6f8;
-      margin: 0;
+      background: #f2f5f8;
       padding: 20px;
     }
     h1 {
@@ -21,27 +25,26 @@
     }
     table {
       width: 100%;
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
       border-collapse: collapse;
-      background: #fff;
+      background: #ffffff;
     }
     th, td {
       padding: 10px;
       border-bottom: 1px solid #ddd;
-      text-align: left;
       font-size: 14px;
     }
     th {
-      background: #e8f0fe;
+      background: #dfefff;
     }
     button {
-      padding: 6px 10px;
+      background: #3498db;
+      color: #fff;
       border: none;
+      padding: 6px 10px;
       border-radius: 4px;
       cursor: pointer;
-      background: #3498db;
-      color: white;
     }
     button:disabled {
       background: #bbb;
@@ -53,9 +56,10 @@
     }
   </style>
 </head>
+
 <body>
 
-<h1>🎁 Lista de Regalos - Baby Shower</h1>
+<h1>🎁 Lista de Regalos – Baby Shower</h1>
 <p>Selecciona un regalo. Una vez elegido, quedará reservado.</p>
 
 <table>
@@ -72,81 +76,67 @@
 </table>
 
 <script>
-const articulos = [
-  // PAÑALES (20)
-  ["Pañales","Pañales niño","Recién nacido (0-1 mes)"],
-  ["Pañales","Pañales niño","0-2 meses"],
-  ["Pañales","Pañales niño","1-3 meses"],
-  ["Pañales","Pañales niño","2-4 meses"],
-  ["Pañales","Pañales niño","3-5 meses"],
-  ["Pañales","Pañales niño","4-6 meses"],
-  ["Pañales","Pañales niño","5-7 meses"],
-  ["Pañales","Pañales niño","6-8 meses"],
-  ["Pañales","Pañales niño","7-9 meses"],
-  ["Pañales","Pañales niño","8-10 meses"],
-  ["Pañales","Pañales niño","9-12 meses"],
-  ["Pañales","Pañales niño","12-15 meses"],
-  ["Pañales","Pañales niño","15-18 meses"],
-  ["Pañales","Pañales niño","18-21 meses"],
-  ["Pañales","Pañales niño","21-24 meses"],
-  ["Pañales","Pañales niño","24-27 meses"],
-  ["Pañales","Pañales niño","27-30 meses"],
-  ["Pañales","Pañales niño","30-33 meses"],
-  ["Pañales","Pañales niño","33-36 meses"],
-  ["Pañales","Pañales niño","36+ meses"],
+  // 🔑 CONFIGURACIÓN FIREBASE (REEMPLAZAR)
+  var firebaseConfig = {
+    apiKey: "TU_API_KEY",
+    authDomain: "TU_PROYECTO.firebaseapp.com",
+    databaseURL: "https://TU_PROYECTO.firebaseio.com",
+    projectId: "TU_PROYECTO",
+  };
 
-  // OTROS ARTÍCULOS
-  ["Ropa","Mameluco algodón niño","0-3 meses"],
-  ["Ropa","Body manga corta niño","0-3 meses"],
-  ["Ropa","Pijama niño","6-9 meses"],
-  ["Ropa","Sudadera niño","12-18 meses"],
-  ["Aseo","Toallitas húmedas","0-36 meses"],
-  ["Aseo","Crema antipañalitis","0-36 meses"],
-  ["Aseo","Shampoo bebé","0-36 meses"],
-  ["Accesorios","Pañalera","0-36 meses"],
-  ["Accesorios","Cambiador portátil","0-24 meses"],
-  ["Accesorios","Silla para carro","0-36 meses"],
-  ["Accesorios","Coche","0-36 meses"],
-  ["Juguetes","Sonajero","0-6 meses"],
-  ["Juguetes","Libros infantiles","12-36 meses"],
-  ["Decoración","Móvil para cuna","0-12 meses"],
-  ["Lencería","Cobija","0-36 meses"],
-  ["Otros","Inodoro entrenador","24-36 meses"]
-];
+  firebase.initializeApp(firebaseConfig);
+  var database = firebase.database();
 
-const lista = document.getElementById("lista");
-let reservados = JSON.parse(localStorage.getItem("reservados")) || [];
+  // 📦 LISTA DE ARTÍCULOS (puedes ampliar a los 100)
+  const articulos = [
+    ["Pañales","Pañales niño","Recién nacido (0-1 mes)"],
+    ["Pañales","Pañales niño","0-2 meses"],
+    ["Pañales","Pañales niño","3-5 meses"],
+    ["Ropa","Mameluco algodón niño","0-3 meses"],
+    ["Ropa","Pijama niño","6-9 meses"],
+    ["Aseo","Toallitas húmedas","0-36 meses"],
+    ["Aseo","Crema antipañalitis","0-36 meses"],
+    ["Accesorios","Pañalera","0-36 meses"],
+    ["Accesorios","Coche","0-36 meses"],
+    ["Juguetes","Sonajero","0-6 meses"],
+    ["Decoración","Móvil para cuna","0-12 meses"],
+    ["Otros","Inodoro entrenador","24-36 meses"]
+  ];
 
-function guardar() {
-  localStorage.setItem("reservados", JSON.stringify(reservados));
-}
+  const lista = document.getElementById("lista");
 
-articulos.forEach((item, index) => {
-  const tr = document.createElement("tr");
-  const reservado = reservados.includes(index);
+  function cargarArticulos() {
+    database.ref("reservas").on("value", snapshot => {
+      const reservados = snapshot.val() || {};
+      lista.innerHTML = "";
 
-  tr.innerHTML = `
-    <td>${item[0]}</td>
-    <td>${item[1]}</td>
-    <td>${item[2]}</td>
-    <td>${reservado ? "<span class='reservado'>Reservado</span>" : "Disponible"}</td>
-    <td>
-      <button ${reservado ? "disabled" : ""} onclick="reservar(${index})">
-        Elegir
-      </button>
-    </td>
-  `;
-  lista.appendChild(tr);
-});
+      articulos.forEach((item, index) => {
+        const reservado = reservados[index];
+        const tr = document.createElement("tr");
 
-function reservar(i) {
-  if (!reservados.includes(i)) {
-    reservados.push(i);
-    guardar();
-    location.reload();
+        tr.innerHTML = `
+          <td>${item[0]}</td>
+          <td>${item[1]}</td>
+          <td>${item[2]}</td>
+          <td>${reservado ? "<span class='reservado'>Reservado</span>" : "Disponible"}</td>
+          <td>
+            <button ${reservado ? "disabled" : ""} onclick="reservar(${index})">
+              Elegir
+            </button>
+          </td>
+        `;
+        lista.appendChild(tr);
+      });
+    });
   }
-}
+
+  function reservar(index) {
+    database.ref("reservas/" + index).set(true);
+  }
+
+  cargarArticulos();
 </script>
 
 </body>
 </html>
+
