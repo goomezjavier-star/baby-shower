@@ -115,19 +115,112 @@
   var database = firebase.database();
 
   const articulos = [
-    ["Pañales","Pañales niño","Recién nacido (0-1 mes)"],
-    ["Pañales","Pañales niño","0-2 meses"],
-    ["Pañales","Pañales niño","3-5 meses"],
-    ["Ropa","Mameluco algodón niño","0-3 meses"],
-    ["Ropa","Pijama niño","6-9 meses"],
-    ["Aseo","Toallitas húmedas","0-36 meses"],
-    ["Aseo","Crema antipañalitis","0-36 meses"],
-    ["Accesorios","Pañalera","0-36 meses"],
-    ["Accesorios","Coche","0-36 meses"],
-    ["Juguetes","Sonajero","0-6 meses"],
-    ["Decoración","Móvil para cuna","0-12 meses"],
-    ["Otros","Inodoro entrenador","24-36 meses"]
-  ];
+    
+  // ASEO
+  ["Aseo","Aceite para bebé + pañitos húmedos","N"],
+  ["Aseo","Aceite para bebé + pañitos húmedos","N"],
+  ["Aseo","Colonia bebé + jabón bebé","N"],
+  ["Aseo","Colonia bebé + shampoo","N"],
+  ["Aseo","Crema antipañalitis y pañitos húmedos","N"],
+  ["Aseo","Crema antipañalitis y pañitos húmedos","N"],
+  ["Aseo","Kit de aseo bebé","N"],
+  ["Aseo","Kit de aseo bebé","N"],
+  ["Aseo","Kit de aseo bebé","N"],
+  ["Aseo","Kit de aseo bebé","N"],
+
+  // ACCESORIOS
+  ["Accesorios","Almohada para prevenir cabeza plana","N"],
+  ["Accesorios","Bañera bebé","0-12 meses"],
+  ["Accesorios","Cambiador portátil","0-24 meses"],
+  ["Accesorios","Cargador bebé","N"],
+  ["Accesorios","Cepillo, peinilla y pañitos húmedos","0-36 meses"],
+  ["Accesorios","Cobijita para bebé","N"],
+  ["Accesorios","Cobijita para bebé","N"],
+  ["Accesorios","Fular para bebé","N"],
+  ["Accesorios","Manta para bebé","N"],
+  ["Accesorios","Termómetro digital","0-36 meses"],
+  ["Accesorios","Teteros","0-12 meses"],
+  ["Accesorios","Vajilla bebé niño","6-24 meses"],
+
+  // DECORACIÓN
+  ["Decoración","Móvil para cuna niño","0-12 meses"],
+  ["Decoración","Peluche","0-36 meses"],
+
+  // JUGUETES
+  ["Juguetes","Bloques didácticos","12-36 meses"],
+  ["Juguetes","Juguete musical","6-18 meses"],
+  ["Juguetes","Juguete para bebé","3-12 meses"],
+  ["Juguetes","Juguete para bebé","6-12 meses"],
+
+  // LENCERÍA
+  ["Lencería","Cobija","0-36 meses"],
+  ["Lencería","Cojín para bebé","0-36 meses"],
+
+  // OTROS
+  ["Otros","Babero impermeable","6-24 meses"],
+  ["Otros","Calentador de tetero portátil","N"],
+  ["Otros","Cojín de lactancia","0-12 meses"],
+  ["Otros","Kit de cuidado para bebé","0-36 meses"],
+  ["Otros","Termo para líquidos bebé","0-36 meses"],
+  ["Otros","Vasinilla entrenador","N"],
+
+  // PAÑALES
+  ["Pañales","Pañales desechables niño","Recién nacido (0-1 mes)"],
+  ["Pañales","Pañales desechables niño","Recién nacido (0-1 mes)"],
+  ["Pañales","Pañales desechables niño","0-2 meses"],
+  ["Pañales","Pañales desechables niño","0-2 meses"],
+  ["Pañales","Pañales desechables niño","1-3 meses"],
+  ["Pañales","Pañales desechables niño","1-3 meses"],
+  ["Pañales","Pañales desechables niño","2-4 meses"],
+  ["Pañales","Pañales desechables niño","2-4 meses"],
+  ["Pañales","Pañales desechables niño","3-5 meses"],
+  ["Pañales","Pañales desechables niño","3-5 meses"],
+  ["Pañales","Pañales desechables niño","4-6 meses"],
+  ["Pañales","Pañales desechables niño","4-6 meses"],
+  ["Pañales","Pañales desechables niño","5-7 meses"],
+  ["Pañales","Pañales desechables niño","5-7 meses"],
+  ["Pañales","Pañales desechables niño","6-8 meses"],
+  ["Pañales","Pañales desechables niño","6-8 meses"],
+  ["Pañales","Pañales desechables niño","7-9 meses"],
+  ["Pañales","Pañales desechables niño","7-9 meses"],
+  ["Pañales","Pañales desechables niño","8-10 meses"],
+  ["Pañales","Pañales desechables niño","8-10 meses"],
+  ["Pañales","Pañales desechables niño","9-12 meses"],
+  ["Pañales","Pañales desechables niño","9-12 meses"],
+
+  // ROPA
+  ["Ropa","Body manga corta niño","0-3 meses"],
+  ["Ropa","Body manga larga niño","3-6 meses"],
+  ["Ropa","Body para bebé","3-6 meses"],
+  ["Ropa","Body para bebé","6-12 meses"],
+  ["Ropa","Buzo","6-12 meses"],
+  ["Ropa","Camiseta","6-12 meses"],
+  ["Ropa","Chaqueta ligera niño","12-24 meses"],
+  ["Ropa","Gorro algodón niño","0-6 meses"],
+  ["Ropa","Gorro pequeño niño","12-24 meses"],
+  ["Ropa","Mameluco algodón niño","3-6 meses"],
+  ["Ropa","Mameluco algodón niño","6-9 meses"],
+  ["Ropa","Mameluco","0-3 meses"],
+  ["Ropa","Mameluco","0-3 meses"],
+  ["Ropa","Medias bebé","6-12 meses"],
+  ["Ropa","Medias niño (paquete)","0-6 meses"],
+  ["Ropa","Pantalón algodón niño","6-12 meses"],
+  ["Ropa","Pijama niño","0-6 meses"],
+  ["Ropa","Pijama niño","6-9 meses"],
+  ["Ropa","Pijama niño","6-12 meses"],
+  ["Ropa","Pijama niño","9-12 meses"],
+  ["Ropa","Ruana para bebé","6-12 meses"],
+  ["Ropa","Seminario camisetas","3-6 meses"],
+  ["Ropa","Seminario pantalones","3-6 meses"],
+  ["Ropa","Sudadera niño","12-18 meses"],
+  ["Ropa","Tenis notuerce","12 meses"],
+  ["Ropa","Toalla de baño niño","N"],
+  ["Ropa","Toalla de baño niño","N"],
+  ["Ropa","Zapatos notuerce","12 meses"],
+  ["Ropa","Zapatos para bebé","0-6 meses"],
+  ["Ropa","Zapatos para bebé","6-12 meses"]
+
+];
 
   const lista = document.getElementById("lista");
 
@@ -164,6 +257,7 @@
 
 </body>
 </html>
+
 
 
 
